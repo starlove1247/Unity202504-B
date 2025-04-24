@@ -1,21 +1,56 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharacterController : MonoBehaviour
 {
     [SerializeField]
     private float moveSpeed = 3f;
 
+    [SerializeField]
+    private PlayerInput playerInput;
+
+    private InputAction moveAction;
+    private InputAction interactAction;
+    private InputAction jumpAction;
+
+    private void Start()
+    {
+        moveAction     = playerInput.actions.FindAction("Move");
+        interactAction = playerInput.actions.FindAction("Interact");
+        jumpAction     = playerInput.actions.FindAction("Jump");
+        // interactAction.performed += InteractActionOnperformed;
+        // playerInput.actions.FindAction("Jump").performed+= Onperformed;
+    }
+
+    private void Onperformed(InputAction.CallbackContext obj)
+    {
+        if (isDead) return;
+        if (isDialog) return;
+        Debug.Log($"Jump");
+    }
+
+    private void InteractActionOnperformed(InputAction.CallbackContext obj)
+    {
+        if (isDead) return;
+        if (isDialog) return;
+        Debug.Log("interact");
+    }
+
+    private bool isDead;
+    private bool isDialog;
+
     // Update is called once per frame
     void Update()
     {
-        // 水平方向 -1 ~ 1
-        var horizontal = Input.GetAxisRaw("Horizontal");
-        // 垂直方向
-        var vertical  = Input.GetAxisRaw("Vertical");
-        var direction = new Vector3(horizontal , vertical , 0); // 移動方向
-        // 處理斜著走比較快的問題，將移動方向正規化
-        direction = direction.normalized;
+        if (isDead) return;
+        if (isDialog) return;
+
+        if (interactAction.WasPressedThisFrame()) Debug.Log($"interact");
+        if (jumpAction.WasPressedThisFrame()) Debug.Log($"Jump");
+
+        var moveVector2 = moveAction.ReadValue<Vector2>();
+        var direction   = new Vector3(moveVector2.x , moveVector2.y , 0); // 移動方向
         // Time.deltaTime = 1/fps 抵銷FPS的影響
         transform.position += direction * moveSpeed * Time.deltaTime;
     }
