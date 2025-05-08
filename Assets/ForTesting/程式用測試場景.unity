@@ -178,10 +178,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <funky>New</funky> <palette>Text</palette>
+  m_text: "<funky>\u6211\u662F</funky> <palette>\u963F\u661F</palette>"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 474befbf456fa244686fd28729de055f, type: 2}
+  m_sharedMaterial: {fileID: -7616456442067509962, guid: 474befbf456fa244686fd28729de055f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
