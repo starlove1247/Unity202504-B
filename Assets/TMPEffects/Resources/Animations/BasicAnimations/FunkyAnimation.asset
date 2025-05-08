@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e4826bc790bed842ac6db43c1ff210e, type: 3}
-  m_Name: "CharacterData \u79FB\u52D5\u901F\u5EA6\u5FEB"
+  m_Script: {fileID: 11500000, guid: 907fb082d5960e6418ee5c85da341104, type: 3}
+  m_Name: FunkyAnimation
   m_EditorClassIdentifier: 
-  moveSpeed: 10.3
+  speed: 3.5
+  squeezeFactor: 0.4
+  amplitude: 10

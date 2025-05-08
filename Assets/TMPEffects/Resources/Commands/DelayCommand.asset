@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e4826bc790bed842ac6db43c1ff210e, type: 3}
-  m_Name: "CharacterData \u79FB\u52D5\u901F\u5EA6\u5FEB"
+  m_Script: {fileID: 11500000, guid: 9fc96b79a91f5ea439dcb810f11d754b, type: 3}
+  m_Name: DelayCommand
   m_EditorClassIdentifier: 
-  moveSpeed: 10.3
