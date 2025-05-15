@@ -14,4 +14,15 @@ public class Dialog : MonoBehaviour
     {
         tmpWriter.RestartWriter();
     }
+
+    [ContextMenu("跳過目前的打字機效果")]
+    /// <summary>
+    /// 跳過目前的打字機效果
+    /// </summary>
+    public void SkipWriter()
+    {
+        tmpWriter.SkipWriter();
+    }
+
+
 }
