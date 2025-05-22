@@ -20,6 +20,12 @@ public class Dialog : MonoBehaviour
         interactAction.performed += InteractActionOnperformed;
     }
 
+    private void OnDisable()
+    {
+        var interactAction = playerInput.actions.FindAction("Interact");
+        interactAction.performed -= InteractActionOnperformed;
+    }
+
     /// <summary>
     /// 按互動鍵去播放下一段對話
     /// </summary>
@@ -33,6 +39,7 @@ public class Dialog : MonoBehaviour
             CloseDialog();
             return;
         }
+
         // 如果還在播放打字機效果，則Skip打字機效果
         if (tmpWriter.IsWriting) SkipWriter();
         // 如果打字機效果結束，則播放下一段文字
