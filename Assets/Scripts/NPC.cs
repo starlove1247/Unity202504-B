@@ -9,10 +9,25 @@ public class NPC : MonoBehaviour
     [SerializeField]
     private Dialog dialog;
 
-    [Button("顯示對話")]
-    public void PlayDialog()
+    /// <summary>
+    /// 目前的對話資料Index，從0開始
+    /// </summary>
+    private int dialogIndex=0;
+
+    [Button("顯示第一段話")]
+    public void PlayFirstDialog()
     {
-        var dialogText = dialogData.dialogTexts[0];
+        dialogIndex = 0; // 重置Index
+        var dialogText = dialogData.dialogTexts[dialogIndex];
+        dialog.SetText(dialogText);
+        dialog.PlayWriter();
+    }
+
+    [Button("顯示下一段話")]
+    public void PlayNextDialog()
+    {
+        dialogIndex++;
+        var dialogText = dialogData.dialogTexts[dialogIndex];
         dialog.SetText(dialogText);
         dialog.PlayWriter();
     }
@@ -22,4 +37,5 @@ public class NPC : MonoBehaviour
     {
         dialog.SkipWriter();
     }
+
 }
