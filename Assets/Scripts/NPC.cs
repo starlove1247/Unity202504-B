@@ -9,8 +9,7 @@ public class NPC : MonoBehaviour
     [SerializeField]
     private Dialog dialog;
 
-  
-
+    
     [Button("顯示第一段話")]
     public void PlayFirstDialog()
     {
