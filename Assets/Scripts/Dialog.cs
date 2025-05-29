@@ -14,10 +14,26 @@ public class Dialog : MonoBehaviour
     [SerializeField]
     private PlayerInput playerInput;
 
+    [SerializeField]
+    private GameObject nextDialogHintUI;
+
     private void Start()
     {
+        nextDialogHintUI.SetActive(false);
+        tmpWriter.OnFinishWriter.AddListener(OnFinishWriter);
+        tmpWriter.OnStartWriter.AddListener(OnStartWriter);
         var interactAction = playerInput.actions.FindAction("Interact");
         interactAction.performed += InteractActionOnperformed;
+    }
+
+    private void OnStartWriter(TMPWriter arg0)
+    {
+        nextDialogHintUI.SetActive(false);
+    }
+
+    private void OnFinishWriter(TMPWriter arg0)
+    {
+        nextDialogHintUI.SetActive(true);
     }
 
     private void OnDisable()
