@@ -20,6 +20,13 @@ public class Dialog : MonoBehaviour
     [SerializeField]
     private CharacterController characterController;
 
+    public static Dialog Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         nextDialogHintUI.SetActive(false);
@@ -149,5 +156,10 @@ public class Dialog : MonoBehaviour
     public bool IsInDialog()
     {
         return isInDialog;
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        transform.position = position;
     }
 }

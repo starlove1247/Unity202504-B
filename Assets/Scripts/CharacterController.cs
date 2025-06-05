@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,7 +31,7 @@ public class CharacterController : MonoBehaviour
     /// <summary>
     /// 角色可不可以移動的狀態
     /// </summary>
-    private bool canMove ;
+    private bool canMove;
 
     public void SetCanMoving(bool canMove)
     {
