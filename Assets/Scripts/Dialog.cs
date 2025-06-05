@@ -17,6 +17,9 @@ public class Dialog : MonoBehaviour
     [SerializeField]
     private GameObject nextDialogHintUI;
 
+    [SerializeField]
+    private CharacterController characterController;
+
     private void Start()
     {
         nextDialogHintUI.SetActive(false);
@@ -56,6 +59,7 @@ public class Dialog : MonoBehaviour
         // 如果對話完畢(最後一段話)，則關閉對話框
         if (tmpWriter.IsWriting == false && dialogIndex + 1 == dialogTexts.Count)
         {
+            characterController.SetCanMoving(true);
             isInDialog = false;
             CloseDialog();
             return;
@@ -106,6 +110,7 @@ public class Dialog : MonoBehaviour
             return;
         }
 
+        characterController.SetCanMoving(false);
         isInDialog  = true;
         dialogIndex = 0; // 重置Index
         var dialogText = dialogTexts[dialogIndex];
@@ -140,6 +145,7 @@ public class Dialog : MonoBehaviour
     /// 紀錄是不是在對話中的狀態
     /// </summary>
     private bool isInDialog;
+
     public bool IsInDialog()
     {
         return isInDialog;

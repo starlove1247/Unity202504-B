@@ -11,25 +11,31 @@ public class CharacterController : MonoBehaviour
     private PlayerInput playerInput;
 
     private InputAction moveAction;
-    private InputAction interactAction;
-    private InputAction jumpAction;
 
     private void Start()
     {
-        moveAction     = playerInput.actions.FindAction("Move");
-        interactAction = playerInput.actions.FindAction("Interact");
-        jumpAction     = playerInput.actions.FindAction("Jump");
+        canMove    = true;
+        moveAction = playerInput.actions.FindAction("Move");
     }
 
     // Update is called once per frame
     void Update()
     {
-        // if (interactAction.WasPressedThisFrame()) Debug.Log($"interact");
-        // if (jumpAction.WasPressedThisFrame()) Debug.Log($"Jump");
-
+        // 如果不能移動，就不往下執行
+        if (canMove == false) return;
         var moveVector2 = moveAction.ReadValue<Vector2>();
         var direction   = new Vector3(moveVector2.x , moveVector2.y , 0); // 移動方向
         // Time.deltaTime = 1/fps 抵銷FPS的影響
         transform.position += direction * characterData.moveSpeed * Time.deltaTime;
+    }
+
+    /// <summary>
+    /// 角色可不可以移動的狀態
+    /// </summary>
+    private bool canMove ;
+
+    public void SetCanMoving(bool canMove)
+    {
+        this.canMove = canMove;
     }
 }

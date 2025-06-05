@@ -555,6 +555,17 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &388457086 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8523225326308961291, guid: 7ac277e082cb6934095cc91365b26df4, type: 3}
+  m_PrefabInstance: {fileID: 1726426156}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4ae93df98d5e644aa857339f165e952, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,6 +1140,7 @@ MonoBehaviour:
   tmpWriter: {fileID: 296143812}
   playerInput: {fileID: 1429583044}
   nextDialogHintUI: {fileID: 1698269310}
+  characterController: {fileID: 388457086}
 --- !u!114 &1429583044
 MonoBehaviour:
   m_ObjectHideFlags: 0
