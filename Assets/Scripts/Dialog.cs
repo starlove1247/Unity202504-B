@@ -22,8 +22,6 @@ public class Dialog : MonoBehaviour
         nextDialogHintUI.SetActive(false);
         tmpWriter.OnFinishWriter.AddListener(OnFinishWriter);
         tmpWriter.OnStartWriter.AddListener(OnStartWriter);
-        var interactAction = playerInput.actions.FindAction("Interact");
-        interactAction.performed += InteractActionOnperformed;
     }
 
     private void OnStartWriter(TMPWriter arg0)
@@ -34,6 +32,12 @@ public class Dialog : MonoBehaviour
     private void OnFinishWriter(TMPWriter arg0)
     {
         nextDialogHintUI.SetActive(true);
+    }
+
+    private void OnEnable()
+    {
+        var interactAction = playerInput.actions.FindAction("Interact");
+        interactAction.performed += InteractActionOnperformed;
     }
 
     private void OnDisable()
@@ -52,6 +56,7 @@ public class Dialog : MonoBehaviour
         // 如果對話完畢(最後一段話)，則關閉對話框
         if (tmpWriter.IsWriting == false && dialogIndex + 1 == dialogTexts.Count)
         {
+            isInDialog = false;
             CloseDialog();
             return;
         }
@@ -101,6 +106,7 @@ public class Dialog : MonoBehaviour
             return;
         }
 
+        isInDialog  = true;
         dialogIndex = 0; // 重置Index
         var dialogText = dialogTexts[dialogIndex];
         SetText(dialogText);
@@ -128,5 +134,14 @@ public class Dialog : MonoBehaviour
         var dialogText = dialogTexts[dialogIndex];
         SetText(dialogText);
         PlayWriter();
+    }
+
+    /// <summary>
+    /// 紀錄是不是在對話中的狀態
+    /// </summary>
+    private bool isInDialog;
+    public bool IsInDialog()
+    {
+        return isInDialog;
     }
 }

@@ -23,6 +23,10 @@ public class NPC : MonoBehaviour
     {
         npc_UIPanel.alpha = 0;
         dialog.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
         playerInput.actions.FindAction("Interact").performed += Onperformed;
     }
 
@@ -33,6 +37,10 @@ public class NPC : MonoBehaviour
 
     private void Onperformed(InputAction.CallbackContext obj)
     {
+        Debug.Log($"NPC 互動鍵按下");
+        // 如果已經在對話中，則不再進行對話
+        if (dialog.IsInDialog()) return;
+        // 角色在範圍內，開始對話
         if (characterInTrigger)
         {
             // 互動建案下
