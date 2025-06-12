@@ -1,13 +1,35 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using DefaultNamespace;
 using NaughtyAttributes;
+using Scripts.Custom;
 using TMPEffects.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Dialog : MonoBehaviour
 {
+#region Public Variables
+
+    public static Dialog Instance;
+
+#endregion
+
+#region Private Variables
+
+    /// <summary>
+    /// 目前的對話資料Index，從0開始
+    /// </summary>
+    private int dialogIndex = 0;
+
+    private List<string> dialogTexts;
+
+    /// <summary>
+    /// 紀錄是不是在對話中的狀態
+    /// </summary>
+    private bool isInDialog;
+
     [SerializeField]
     private TMPWriter tmpWriter;
 
@@ -17,10 +39,11 @@ public class Dialog : MonoBehaviour
     [SerializeField]
     private GameObject nextDialogHintUI;
 
-    [SerializeField]
-    private CharacterController characterController;
+    
 
-    public static Dialog Instance;
+#endregion
+
+#region Unity events
 
     private void Awake()
     {
@@ -34,49 +57,9 @@ public class Dialog : MonoBehaviour
         tmpWriter.OnStartWriter.AddListener(OnStartWriter);
     }
 
-    private void OnStartWriter(TMPWriter arg0)
-    {
-        nextDialogHintUI.SetActive(false);
-    }
+#endregion
 
-    private void OnFinishWriter(TMPWriter arg0)
-    {
-        nextDialogHintUI.SetActive(true);
-    }
-
-    private void OnEnable()
-    {
-        var interactAction = playerInput.actions.FindAction("Interact");
-        interactAction.performed += InteractActionOnperformed;
-    }
-
-    private void OnDisable()
-    {
-        var interactAction = playerInput.actions.FindAction("Interact");
-        interactAction.performed -= InteractActionOnperformed;
-    }
-
-    /// <summary>
-    /// 按互動鍵去播放下一段對話
-    /// </summary>
-    /// <param name="obj"></param>
-    private void InteractActionOnperformed(InputAction.CallbackContext obj)
-    {
-        Debug.Log($"互動鍵按下");
-        // 如果對話完畢(最後一段話)，則關閉對話框
-        if (tmpWriter.IsWriting == false && dialogIndex + 1 == dialogTexts.Count)
-        {
-            characterController.SetCanMoving(true);
-            isInDialog = false;
-            CloseDialog();
-            return;
-        }
-
-        // 如果還在播放打字機效果，則Skip打字機效果
-        if (tmpWriter.IsWriting) SkipWriter();
-        // 如果打字機效果結束，則播放下一段文字
-        else if (tmpWriter.IsWriting == false) PlayNextDialog();
-    }
+#region Public Methods
 
     [Button("關閉對話框")]
     public void CloseDialog()
@@ -84,28 +67,9 @@ public class Dialog : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// 目前的對話資料Index，從0開始
-    /// </summary>
-    private int dialogIndex = 0;
-
-    private List<string> dialogTexts;
-
-    [Button("播放打字機效果")]
-    public void PlayWriter()
+    public bool IsInDialog()
     {
-        tmpWriter.RestartWriter();
-    }
-
-    [Button("跳過目前的打字機效果")]
-    public void SkipWriter()
-    {
-        tmpWriter.SkipWriter();
-    }
-
-    public void SetText(string dialogText)
-    {
-        tmpWriter.SetText(dialogText);
+        return isInDialog;
     }
 
     public void PlayFirstDialog()
@@ -117,17 +81,13 @@ public class Dialog : MonoBehaviour
             return;
         }
 
-        characterController.SetCanMoving(false);
+        EventBus.Raise<DialogStartEvent>(_ => _.OnDialogStarted());
+        // characterController.SetCanMoving(false);
         isInDialog  = true;
         dialogIndex = 0; // 重置Index
         var dialogText = dialogTexts[dialogIndex];
         SetText(dialogText);
         PlayWriter();
-    }
-
-    public void SetDialogTexts(List<string> texts)
-    {
-        dialogTexts = texts;
     }
 
     public void PlayNextDialog()
@@ -148,18 +108,81 @@ public class Dialog : MonoBehaviour
         PlayWriter();
     }
 
-    /// <summary>
-    /// 紀錄是不是在對話中的狀態
-    /// </summary>
-    private bool isInDialog;
-
-    public bool IsInDialog()
+    [Button("播放打字機效果")]
+    public void PlayWriter()
     {
-        return isInDialog;
+        tmpWriter.RestartWriter();
+    }
+
+    public void SetDialogTexts(List<string> texts)
+    {
+        dialogTexts = texts;
     }
 
     public void SetPosition(Vector3 position)
     {
         transform.position = position;
     }
+
+    public void SetText(string dialogText)
+    {
+        tmpWriter.SetText(dialogText);
+    }
+
+    [Button("跳過目前的打字機效果")]
+    public void SkipWriter()
+    {
+        tmpWriter.SkipWriter();
+    }
+
+#endregion
+
+#region Private Methods
+
+    /// <summary>
+    /// 按互動鍵去播放下一段對話
+    /// </summary>
+    /// <param name="obj"></param>
+    private void InteractActionOnperformed(InputAction.CallbackContext obj)
+    {
+        Debug.Log($"互動鍵按下");
+        // 如果對話完畢(最後一段話)，則關閉對話框
+        if (tmpWriter.IsWriting == false && dialogIndex + 1 == dialogTexts.Count)
+        {
+            // characterController.SetCanMoving(true);
+            EventBus.Raise<DialogEndEvent>(_ => _.OnDialogEnded());
+            isInDialog = false;
+            CloseDialog();
+            return;
+        }
+
+        // 如果還在播放打字機效果，則Skip打字機效果
+        if (tmpWriter.IsWriting) SkipWriter();
+        // 如果打字機效果結束，則播放下一段文字
+        else if (tmpWriter.IsWriting == false) PlayNextDialog();
+    }
+
+    private void OnDisable()
+    {
+        var interactAction = playerInput.actions.FindAction("Interact");
+        interactAction.performed -= InteractActionOnperformed;
+    }
+
+    private void OnEnable()
+    {
+        var interactAction = playerInput.actions.FindAction("Interact");
+        interactAction.performed += InteractActionOnperformed;
+    }
+
+    private void OnFinishWriter(TMPWriter arg0)
+    {
+        nextDialogHintUI.SetActive(true);
+    }
+
+    private void OnStartWriter(TMPWriter arg0)
+    {
+        nextDialogHintUI.SetActive(false);
+    }
+
+#endregion
 }

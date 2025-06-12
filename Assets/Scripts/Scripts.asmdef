@@ -5,7 +5,8 @@
         "Unity.InputSystem",
         "TMPEffects",
         "NaughtyAttributes.Core",
-        "DOTween.Modules"
+        "DOTween.Modules",
+        "CustomLibrary"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
